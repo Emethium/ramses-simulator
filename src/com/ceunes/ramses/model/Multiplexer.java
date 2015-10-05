@@ -5,6 +5,11 @@ public class Multiplexer {
 	private boolean select0;
 	private boolean select1;
 	
+	public Multiplexer() {
+		this.select0 = false;
+		this.select1 = false;
+	}
+	
 	public byte multiplex(byte first, byte second) {
 		if(!select0) {
 			return first;

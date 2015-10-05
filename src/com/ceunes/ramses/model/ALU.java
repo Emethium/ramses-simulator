@@ -2,9 +2,17 @@ package com.ceunes.ramses.model;
 
 public class ALU {
 
+	private boolean negativeFlag;
+	private boolean zeroFlag;
+	private boolean carryFlag;
 	
-	// TODO criar o tipo BIT
+	public ALU() {
+		this.negativeFlag = false;
+		this.zeroFlag = false;
+		this.carryFlag = false;
+	}
 	
+	/* ALU basic operations */
 	public byte add(byte x, byte y, byte carry) {
 		return (byte)(x+y+carry);
 	}
@@ -25,6 +33,10 @@ public class ALU {
 		return (byte)(-x);
 	}
 	
+	public byte not(byte x) {
+		return (byte)~x;
+	}
+	
 	public byte getY(byte y) {
 		return y;
 	}
@@ -32,6 +44,31 @@ public class ALU {
 	public byte shiftRight(byte x) {
 		return (byte)(x >> 1);
 	}
+
 	
-	// TODO fazer operação NOT
+	/* Getters and Setters */
+	public boolean getNegativeFlag() {
+		return negativeFlag;
+	}
+
+	public void setNegativeFlag(boolean negativeFlag) {
+		this.negativeFlag = negativeFlag;
+	}
+
+	public boolean getZeroFlag() {
+		return zeroFlag;
+	}
+
+	public void setZeroFlag(boolean zeroFlag) {
+		this.zeroFlag = zeroFlag;
+	}
+
+	public boolean getCarryFlag() {
+		return carryFlag;
+	}
+
+	public void setCarryFlag(boolean carryFlag) {
+		this.carryFlag = carryFlag;
+	}
+	
 }
