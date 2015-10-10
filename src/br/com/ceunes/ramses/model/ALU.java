@@ -5,6 +5,7 @@ public class ALU {
 	private byte negativeFlag;
 	private byte zeroFlag;
 	private byte carryFlag;
+	private byte value;
 	
 	public ALU() {
 		this.negativeFlag = 0;
@@ -13,36 +14,36 @@ public class ALU {
 	}
 	
 	/* ALU basic operations */
-	public byte add(byte x, byte y, byte carry) {
-		return (byte)(x+y+carry);
+	public void add(byte x, byte y, byte carry) {
+		value = (byte)(x+y+carry);
 	}
 	
-	public byte sub(byte x, byte y) {
-		return (byte)(x-y);
+	public void sub(byte x, byte y) {
+		value = (byte)(x-y);
 	}
 	
-	public byte and(byte x, byte y) {
-		return (byte)(x&y);
+	public void and(byte x, byte y) {
+		value = (byte)(x&y);
 	}
 	
-	public byte or(byte x, byte y) {
-		return (byte)(x|y);
+	public void or(byte x, byte y) {
+		value = (byte)(x|y);
 	}
 	
-	public byte negate(byte x) {
-		return (byte)(-x);
+	public void negate(byte x) {
+		value = (byte)(-x);
 	}
 	
-	public byte not(byte x) {
-		return x == 0 ? (byte)1 : 0;
+	public void not(byte x) {
+		value = x == 0 ? (byte)1 : 0;
 	}
 	
-	public byte getY(byte y) {
-		return y;
+	public void getY(byte y) {
+		value = y;
 	}
 	
-	public byte shiftRight(byte x) {
-		return (byte)(x >> 1);
+	public void shiftRight(byte x) {
+		value = (byte)(x >> 1);
 	}
 
 	
@@ -69,6 +70,14 @@ public class ALU {
 
 	public void setCarryFlag(byte carryFlag) {
 		this.carryFlag = carryFlag;
+	}
+
+	public byte getValue() {
+		return value;
+	}
+
+	public void setValue(byte value) {
+		this.value = value;
 	}
 	
 }
