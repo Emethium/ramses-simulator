@@ -1,4 +1,4 @@
-package com.ceunes.ramses.model;
+package br.com.ceunes.ramses.model;
 
 public class ProgramCounter extends Register {
 	@SuppressWarnings("unused")

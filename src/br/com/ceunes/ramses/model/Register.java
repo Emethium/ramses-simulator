@@ -1,4 +1,4 @@
-package com.ceunes.ramses.model;
+package br.com.ceunes.ramses.model;
 
 public class Register {
 	
@@ -11,6 +11,4 @@ public class Register {
 	public void setValue(byte value) {
 		this.value = value;
 	}
-	
-	
 }

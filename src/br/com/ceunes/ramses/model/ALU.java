@@ -1,15 +1,15 @@
-package com.ceunes.ramses.model;
+package br.com.ceunes.ramses.model;
 
 public class ALU {
 
-	private boolean negativeFlag;
-	private boolean zeroFlag;
-	private boolean carryFlag;
+	private byte negativeFlag;
+	private byte zeroFlag;
+	private byte carryFlag;
 	
 	public ALU() {
-		this.negativeFlag = false;
-		this.zeroFlag = false;
-		this.carryFlag = false;
+		this.negativeFlag = 0;
+		this.zeroFlag = 0;
+		this.carryFlag = 0;
 	}
 	
 	/* ALU basic operations */
@@ -34,7 +34,7 @@ public class ALU {
 	}
 	
 	public byte not(byte x) {
-		return (byte)~x;
+		return x == 0 ? (byte)1 : 0;
 	}
 	
 	public byte getY(byte y) {
@@ -47,27 +47,27 @@ public class ALU {
 
 	
 	/* Getters and Setters */
-	public boolean getNegativeFlag() {
+	public byte getNegativeFlag() {
 		return negativeFlag;
 	}
 
-	public void setNegativeFlag(boolean negativeFlag) {
+	public void setNegativeFlag(byte negativeFlag) {
 		this.negativeFlag = negativeFlag;
 	}
 
-	public boolean getZeroFlag() {
+	public byte getZeroFlag() {
 		return zeroFlag;
 	}
 
-	public void setZeroFlag(boolean zeroFlag) {
+	public void setZeroFlag(byte zeroFlag) {
 		this.zeroFlag = zeroFlag;
 	}
 
-	public boolean getCarryFlag() {
+	public byte getCarryFlag() {
 		return carryFlag;
 	}
 
-	public void setCarryFlag(boolean carryFlag) {
+	public void setCarryFlag(byte carryFlag) {
 		this.carryFlag = carryFlag;
 	}
 	
