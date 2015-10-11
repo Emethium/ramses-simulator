@@ -20,6 +20,7 @@ public class Circuit {
 	protected Multiplexer muxToRem;
 	protected Multiplexer muxToAlu;
 	protected Multiplexer muxToPC;
+	protected byte memory;
 
 	public void chargeRa(byte ra) {
 		registerA.setValue(ra);
@@ -51,8 +52,12 @@ public class Circuit {
 		rdm.setValue(data);
 	}
 
-	public byte write() {
-		return rdm.geValue();
+	public void write() {
+		memory = rdm.getValue();
+	}
+	
+	public void read() {
+		rdm.setValue(memory);
 	}
 
 	public void setMuxToAlu(byte s1, byte s2) {
@@ -75,6 +80,14 @@ public class Circuit {
 
 	public void chargePc(byte address) {
 		programCounter.setValue(address);
+	}
+
+	public byte getMemory() {
+		return memory;
+	}
+
+	public void setMemory(byte memory) {
+		this.memory = memory;
 	}
 
 }

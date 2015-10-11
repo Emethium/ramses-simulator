@@ -18,6 +18,16 @@ public class Multiplexer {
 		}
 	}
 
+	public byte multiplex(byte first, byte second, byte third) {
+		if (select0 == 0 && select1 == 0) {
+			return first;
+		} else if (select0 == 1 && select1 == 0) {
+			return second;
+		} else {
+			return third;
+		}
+	}
+	
 	public byte multiplex(byte first, byte second, byte third, byte fourth) {
 		if (select0 == 0 && select1 == 0) {
 			return first;

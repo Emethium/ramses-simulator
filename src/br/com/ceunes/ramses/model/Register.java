@@ -4,7 +4,7 @@ public class Register {
 	
 	private byte value;
 
-	public byte geValue() {
+	public byte getValue() {
 		return value;
 	}
 
