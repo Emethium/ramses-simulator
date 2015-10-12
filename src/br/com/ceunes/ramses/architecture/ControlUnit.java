@@ -6,6 +6,7 @@ public class ControlUnit {
 	private Circuit circuit;
 
 	public void decode(String data) {
+		String operation;
 		char aux, aux2;
 
 		// Check if a RA charge operation was expected, then execute
@@ -32,8 +33,15 @@ public class ControlUnit {
 		circuit.setMuxToAlu(charToByte(aux), charToByte(data.charAt(0)));
 		data = nextControlUnit(data, 1);
 
-		// TODO There's a sel_ALU (3 bits) to grab over here, but I'm not what
-		// that is
+		// Calls the desired operation at the ALU
+		operation = data.substring(0, 2);
+		data = nextControlUnit(data, 3);
+		circuit.alu.operate(operation,
+				circuit.muxToAlu.multiplex(circuit.registerA.getValue(),
+						circuit.registerB.getValue(),
+						circuit.registerX.getValue(),
+						circuit.programCounter.getValue()), circuit.rdm
+						.getValue());
 
 		// Charge the N, Z and C flags
 		aux = data.charAt(0);

@@ -4,13 +4,7 @@ public class Decoder {
 	private byte[] bits;
 	private byte[] output;
 
-	public Decoder() {
-		for (@SuppressWarnings("unused")
-		byte b : output) {
-			b = 0;
-		}
-	}
-
+	
 	public byte decode() {
 		if (bits[0] == 0 && bits[1] == 0 && bits[2] == 0 && bits[3] == 0) {
 			output[0] = 1;
