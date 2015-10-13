@@ -11,25 +11,43 @@ import br.com.ceunes.ramses.model.Register;
 
 public class Circuit {
 
-	protected ProgramCounter programCounter = new ProgramCounter();
-	protected Register rem = new Register();
-	protected Register rdm = new Register();
-	protected Register registerX = new Register();
-	protected Register registerA = new Register();
-	protected Register registerB = new Register();
-	protected Register instructionRegister = new Register();
-	protected ALU alu = new ALU();
-	protected Decoder decoder = new Decoder();
-	protected Multiplexer muxToRem = new Multiplexer();
-	protected Multiplexer muxToAlu = new Multiplexer();
-	protected Multiplexer muxToPC = new Multiplexer();
-	protected List<Byte> memory = new ArrayList<Byte>();
+	protected ProgramCounter programCounter;
+	protected Register rem;
+	protected Register rdm;
+	protected Register registerX;
+	protected Register registerA;
+	protected Register registerB;
+	protected Register instructionRegister;
+	protected ALU alu;
+	protected Decoder decoder;
+	protected Multiplexer muxToRem;
+	protected Multiplexer muxToAlu;
+	protected Multiplexer muxToPC;
+	protected List<Byte> memory;
 
 	public Circuit() {
-		for(int i = 0; i < 256; i++) {
-			memory.add((byte)0);
+		programCounter = new ProgramCounter();
+		rem = new Register();
+		rdm = new Register();
+		registerX = new Register();
+		registerA = new Register();
+		registerB = new Register();
+		instructionRegister = new Register();
+		alu = new ALU();
+		decoder = new Decoder();
+		muxToRem = new Multiplexer();
+		muxToAlu = new Multiplexer();
+		muxToPC = new Multiplexer();
+		memory = new ArrayList<Byte>();
+		/*
+		 * Creates a 256 byte memory, full of zeros, so we don't have access
+		 * memory violations
+		 */
+		for (int i = 0; i < 256; i++) {
+			memory.add((byte) 0);
 		}
 	}
+
 	public void chargeRa(byte ra) {
 		registerA.setValue(ra);
 	}
@@ -65,7 +83,7 @@ public class Circuit {
 	}
 
 	public void read() {
-		rdm.setValue(memory.get(rem.getValue()));
+		rdm.setValue((byte) memory.get(rem.getValue()));
 	}
 
 	public void setMuxToAlu(byte s1, byte s2) {
@@ -97,6 +115,29 @@ public class Circuit {
 	public void setMemory(List<Byte> memory) {
 		this.memory = memory;
 	}
-
+	
+	public byte getRemValue() {
+		return this.rem.getValue();
+	}
+	
+	public byte getRdmValue() {
+		return this.rdm.getValue();
+	}
+	
+	public byte getPcValue() {
+		return this.programCounter.getValue();
+	}
+	
+	public byte getS1Value() {
+		return this.muxToAlu.getSelect0();
+	}
+	
+	public byte getS2Value() {
+		return this.muxToAlu.getSelect1();
+	}
+	
+	public byte getAluValue() {
+		return this.alu.getValue();
+	}
 
 }

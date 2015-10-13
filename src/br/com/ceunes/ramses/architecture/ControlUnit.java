@@ -3,7 +3,7 @@ package br.com.ceunes.ramses.architecture;
 import br.com.ceunes.ramses.architecture.Circuit;
 
 public class ControlUnit {
-	private Circuit circuit;
+	public Circuit circuit = new Circuit();
 
 	public void decode(String data) {
 		String operation;
@@ -34,7 +34,7 @@ public class ControlUnit {
 		data = nextControlUnit(data, 1);
 
 		// Calls the desired operation at the ALU
-		operation = data.substring(0, 2);
+		operation = data.substring(0, 3);
 		data = nextControlUnit(data, 3);
 		circuit.alu.operate(operation,
 				circuit.muxToAlu.multiplex(circuit.registerA.getValue(),

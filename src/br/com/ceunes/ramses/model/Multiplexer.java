@@ -42,7 +42,7 @@ public class Multiplexer {
 
 	/* Getters and Setters */
 
-	public byte isSelect0() {
+	public byte getSelect0() {
 		return select0;
 	}
 
@@ -50,7 +50,7 @@ public class Multiplexer {
 		this.select0 = select0;
 	}
 
-	public byte isSelect1() {
+	public byte getSelect1() {
 		return select1;
 	}
 
