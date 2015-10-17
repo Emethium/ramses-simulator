@@ -2,6 +2,9 @@ package br.com.ceunes.ramses.test;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import br.com.ceunes.ramses.architecture.ControlUnit;
@@ -50,7 +53,52 @@ public class ControlUnitTest {
 	 */
 
 	@Test
-	public void RemChargeFromTheProgramCounter() {
+	public void orOperationTest() {
+		unit.circuit.chargeRdm((byte) 102);
+		unit.circuit.chargeRx((byte) 101);
+		String data = new String("000010110000000000000");
+		unit.decode(data);
+		assertEquals("ALU must have 101 value", (byte) 101,
+				unit.circuit.getAluValue());
+	}
+
+	@Test
+	public void RdmChargedFromRegisterTest() {
+		unit.circuit.chargePc((byte) 160);
+		String data = new String("000110000000000000001");
+		unit.decode(data);
+		assertEquals("s1 and s2 must be 1", (byte) 1, unit.circuit.getS1Value());
+		assertEquals("s1 and s2 must be 1", (byte) 1, unit.circuit.getS2Value());
+		assertEquals("Rdm charged with 160 from the PC", (byte) 160,
+				unit.circuit.getRdmValue());
+		;
+	}
+
+	@Test
+	public void RiChargeTest() {
+		unit.circuit.chargeRdm((byte) 89);
+		String data = new String("000000000000000010000");
+		unit.decode(data);
+		assertEquals("The RI should have been charged with 89", (byte) 89,
+				unit.circuit.getRiValue());
+	}
+
+	@Test
+	public void writingToMemoryTest() {
+		/*
+		 * The idea is to put the value '100' on the '128' memory position,
+		 * indexed by the value inside the REM.
+		 */
+		unit.circuit.chargeRem((byte) 128);
+		unit.circuit.chargeRdm((byte) 100);
+		String data = new String("000000000000000000010");
+		unit.decode(data);
+		byte aux = unit.circuit.getMemory().get(128);
+		assertEquals("Memory position 128 should contain 100", (byte) 100, aux);
+	}
+
+	@Test
+	public void RemChargeFromTheProgramCounterTest() {
 		unit.circuit.chargePc((byte) 10);
 		String data = new String("000110000000000001000");
 		unit.decode(data);
@@ -59,6 +107,16 @@ public class ControlUnitTest {
 		assertEquals("alu value must be 10", (byte) 10,
 				unit.circuit.getAluValue());
 		assertEquals("REM should have the value 10", (byte) 10,
+				unit.circuit.getRemValue());
+	}
+
+	@Test
+	public void RemChargedFromRdmTest() {
+		unit.circuit.chargeRdm((byte) 180);
+		unit.circuit.chargeRem((byte) 0);
+		String data = new String("000000000000000101000");
+		unit.decode(data);
+		assertEquals("Rem charged with 180", (byte) 180,
 				unit.circuit.getRemValue());
 	}
 
@@ -72,6 +130,28 @@ public class ControlUnitTest {
 
 	@Test
 	public void readingFromMemoryTest() {
+		// First of all, we define a memory and set it's content.
+		List<Byte> memory = new ArrayList<Byte>();
+		memory.add((byte) 10);
+		memory.add((byte) 33);
+		unit.circuit.setMemory(memory);
+		/*
+		 * Now we're going to charge the REM so it points somewhere inside the
+		 * memory. Position zero, in this case.
+		 */
+		unit.circuit.chargeRem((byte) 0);
+		String data = new String("000000000000000000100");
+		unit.decode(data);
+		assertEquals("Rdm should have been charged with 10", (byte) 10,
+				unit.circuit.getRdmValue());
+		/*
+		 * We're going to do it again, changing the REM so it points to the
+		 * second value inside the memory, which is a 33.
+		 */
+		unit.circuit.chargeRem((byte) 1);
+		unit.decode(data);
+		assertEquals("Now RDM should have been charged with 33", (byte) 33,
+				unit.circuit.getRdmValue());
 
 	}
 }

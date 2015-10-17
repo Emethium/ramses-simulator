@@ -67,7 +67,7 @@ public class Circuit {
 	}
 
 	public void chargeIRegister(byte data) {
-		instructionRegister.setValue(data);
+		instructionRegister.setValue(rdm.getValue());
 	}
 
 	public void chargeRem(byte data) {
@@ -79,7 +79,7 @@ public class Circuit {
 	}
 
 	public void write() {
-		memory.set(rem.getValue(), rdm.getValue());
+		memory.set(Math.abs((int) rem.getValue()), rdm.getValue());
 	}
 
 	public void read() {
@@ -113,31 +113,39 @@ public class Circuit {
 	}
 
 	public void setMemory(List<Byte> memory) {
-		this.memory = memory;
+		int counter = 0;
+		for (Byte b : memory) {
+			this.memory.set(counter, b);
+			counter++;
+		}
 	}
-	
+
 	public byte getRemValue() {
 		return this.rem.getValue();
 	}
-	
+
 	public byte getRdmValue() {
 		return this.rdm.getValue();
 	}
-	
+
 	public byte getPcValue() {
 		return this.programCounter.getValue();
 	}
-	
+
 	public byte getS1Value() {
 		return this.muxToAlu.getSelect0();
 	}
-	
+
 	public byte getS2Value() {
 		return this.muxToAlu.getSelect1();
 	}
-	
+
 	public byte getAluValue() {
 		return this.alu.getValue();
+	}
+
+	public byte getRiValue() {
+		return this.instructionRegister.getValue();
 	}
 
 }

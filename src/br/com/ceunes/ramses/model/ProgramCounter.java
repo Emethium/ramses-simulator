@@ -1,16 +1,22 @@
 package br.com.ceunes.ramses.model;
 
-public class ProgramCounter extends Register {
+public class ProgramCounter {
 
 	private byte value;
 
 	public ProgramCounter() {
-		value = (byte) 0;
+		this.value = (byte) 0;
+	}
+	
+	public byte getValue() {
+		return value;
+	}
+
+	public void setValue(byte value) {
+		this.value = value;
 	}
 
 	public void increment() {
-		System.out.println(this.value);
 		value++;
-		System.out.println(this.value);
 	}
 }
