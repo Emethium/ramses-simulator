@@ -56,13 +56,22 @@ public class ControlUnitTest {
 		unit.decode(data);
 		assertEquals("s1 should be 1", (byte) 1, unit.circuit.getS1Value());
 		assertEquals("s2 should be 1", (byte) 1, unit.circuit.getS2Value());
-		assertEquals("alu value must be 10", (byte)10, unit.circuit.getAluValue());
+		assertEquals("alu value must be 10", (byte) 10,
+				unit.circuit.getAluValue());
 		assertEquals("REM should have the value 10", (byte) 10,
 				unit.circuit.getRemValue());
 	}
-	
+
+	@Test
+	public void incrementingProgramCounterTest() {
+		unit.circuit.chargePc((byte) 90);
+		String data = new String("000000000000100000000");
+		unit.decode(data);
+		assertEquals("pc should be 91", (byte) 91, unit.circuit.getPcValue());
+	}
+
 	@Test
 	public void readingFromMemoryTest() {
-		
+
 	}
 }

@@ -59,6 +59,7 @@ public class ControlUnit {
 
 		// Increment PC check, then execute
 		if (data.charAt(0) == '1') {
+			System.out.println("INCREMEEEEEEEEENT");
 			circuit.incrementPC();
 		}
 		data = nextControlUnit(data, 1);
