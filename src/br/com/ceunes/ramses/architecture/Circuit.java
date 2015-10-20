@@ -147,5 +147,9 @@ public class Circuit {
 	public byte getRiValue() {
 		return this.instructionRegister.getValue();
 	}
+	
+	public byte getRbValue() {
+		return this.registerB.getValue();
+	}
 
 }

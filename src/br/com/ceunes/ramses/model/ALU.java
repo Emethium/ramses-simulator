@@ -47,7 +47,12 @@ public class ALU {
 	}
 
 	public void or(byte x, byte y) {
-		value = (byte) (x | y);
+		if(x != 0) {
+			value = x;
+		} else {
+			value = y;
+		}
+		
 	}
 
 	public void negate(byte x) {

@@ -53,6 +53,34 @@ public class ControlUnitTest {
 	 */
 
 	@Test
+	public void instructionSearch() {
+		List<Byte> memory = new ArrayList<Byte>();
+		memory.add((byte) 123);
+		memory.add((byte) 130);
+		memory.add((byte) 150);
+		unit.circuit.setMemory(memory);
+
+		unit.circuit.chargePc((byte) 2);
+		String data = new String("000110000000000001000");
+		unit.decode(data);
+		assertEquals("Rem charged with 2", (byte) 2, unit.circuit.getRemValue());
+
+		data = "000000000000000000100";
+		unit.decode(data);
+		assertEquals("Rdm read the value 150", (byte) 150,
+				unit.circuit.getRdmValue());
+
+		data = "000000000000100000000";
+		unit.decode(data);
+		assertEquals("Pc incremented", (byte) 3, unit.circuit.getPcValue());
+
+		data = "000000000000000010000";
+		unit.decode(data);
+		assertEquals("Ri equals 150", (byte) 150, unit.circuit.getRiValue());
+
+	}
+
+	@Test
 	public void orOperationTest() {
 		unit.circuit.chargeRdm((byte) 102);
 		unit.circuit.chargeRx((byte) 101);
@@ -126,6 +154,44 @@ public class ControlUnitTest {
 		String data = new String("000000000000100000000");
 		unit.decode(data);
 		assertEquals("pc should be 91", (byte) 91, unit.circuit.getPcValue());
+	}
+
+	@Test
+	public void readOperationFollowedBySubtractionOfTheValueInsideRb() {
+		/*
+		 * Defining memory and it's contents
+		 */
+		List<Byte> memory = new ArrayList<Byte>();
+		memory.add((byte) 120);
+		memory.add((byte) 190);
+		unit.circuit.setMemory(memory);
+		/*
+		 * Charge the REM so it point to the 2 memory position, that contains
+		 * the value 190. After that we'll set the ALU value as 90, to charge
+		 * the RB and do the subtraction later.
+		 */
+		unit.circuit.chargeRem((byte) 1);
+		String data = new String("000000000000000000100");
+		unit.decode(data);
+		assertEquals("Rdm equals 190", (byte) 190, unit.circuit.getRdmValue());
+
+		data = "010101110000000000000";
+		unit.decode(data);
+		assertEquals("Alu recieves 190 from the RDM", (byte) 190,
+				unit.circuit.getAluValue());
+		/*
+		 * Now we charge the RB, cause the subtraction and check the ALU value
+		 * again. It should contain 100 ()
+		 */
+		data = "010100010000000000000";
+		unit.decode(data);
+		assertEquals("The RB also has the value 190", (byte) 190,
+				unit.circuit.getRbValue());
+		unit.circuit.chargeRdm((byte) 90);
+		data = "000100010000000000000";
+		unit.decode(data);
+		assertEquals("Now Alu should have 100 inside", (byte) 100,
+				unit.circuit.getAluValue());
 	}
 
 	@Test
