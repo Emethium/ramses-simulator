@@ -5,24 +5,50 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import br.com.ceunes.ramses.architecture.Circuit;
 import br.com.ceunes.ramses.architecture.ControlUnit;
+import br.com.ceunes.ramses.view.*;
+
+
 
 public class TextProcessing {
+	public Interface interfac2;
+	public ControlUnit unit;
+	public BufferedReader entradaString;
+	public boolean next=true;
+	public boolean one;
+	public Circuit circuit;
 
-	public ControlUnit unit = new ControlUnit();
-
-	public void read() throws IOException {
-		FileInputStream entrada = new FileInputStream("file.txt");
-		InputStreamReader entradaFormatada = new InputStreamReader(entrada);
-		BufferedReader entradaString = new BufferedReader(entradaFormatada);
-
+	public void read(boolean all, boolean begin, Interface interfac2,Circuit circuit) throws IOException {
+		this.interfac2= interfac2;
+		this.circuit = circuit;
+		unit = new ControlUnit(interfac2,circuit);
+				FileInputStream entrada = new FileInputStream("file.txt");
+				InputStreamReader entradaFormatada = new InputStreamReader(entrada);
+				entradaString = new BufferedReader(entradaFormatada);
+				if(all) loop1();
+				else loop(this.next);
+	}
+	public void loop1() throws IOException{
 		String linha = entradaString.readLine();
-
 		while (linha != null) {
-			System.out.println(linha);
-			unit.decode(linha);
-			linha = entradaString.readLine();
+					System.out.println(linha);
+					unit.decode(linha);
+					linha = entradaString.readLine();
 		}
-		entrada.close();
+		entradaString.close();
+	
+	}
+
+	public void loop(boolean prox) throws IOException{
+			String linha = entradaString.readLine();
+			if(linha==null){
+				interfac2.setFim(false);
+				entradaString.close();
+				
+			}
+			else{
+			unit.decode(linha);
+			}
 	}
 }

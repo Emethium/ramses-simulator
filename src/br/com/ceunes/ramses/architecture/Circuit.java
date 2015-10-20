@@ -100,8 +100,9 @@ public class Circuit {
 		muxToRem.setSelect1(s4);
 	}
 
-	public void incrementPC() {
+	public byte incrementPC() {
 		programCounter.increment();
+		return programCounter.getValue();
 	}
 
 	public void chargePc(byte address) {

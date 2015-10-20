@@ -15,7 +15,7 @@ public class TextProcessingTest {
 	@Test
 	public void readingStringTest() throws IOException {
 		read.unit.circuit.chargePc((byte) 10);
-		read.read();
+		//read.read();
 		assertEquals("s1 should be 1", (byte) 1, read.unit.circuit.getS1Value());
 		assertEquals("s2 should be 1", (byte) 1, read.unit.circuit.getS2Value());
 		assertEquals("alu value must be 11", (byte) 11, read.unit.circuit.getAluValue());

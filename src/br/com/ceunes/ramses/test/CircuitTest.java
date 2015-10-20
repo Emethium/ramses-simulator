@@ -37,4 +37,11 @@ public class CircuitTest {
 		byte oi = (byte) circuit.getMemory().get(120);
 		assertEquals("We should have 200 in the RDM again", (byte) 200, oi);
 	}
+	
+	@Test
+	public void incrementTest() {
+		circuit.chargePc((byte) 31);
+		circuit.incrementPC();
+		assertEquals("pc equals 32", (byte) 32, circuit.getPcValue());
+	}
 }
