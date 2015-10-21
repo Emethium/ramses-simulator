@@ -1223,23 +1223,22 @@ public class Interface extends JFrame {
 		}
 	}
 
-	public void RecebeCargaCarry(char cargaCarry) {
-		if (cargaCarry == '0') {
+	public void RecebeCargaCarry(byte cargaCarry) {
+		if (cargaCarry == 0) {
 			Carry.setSelected(false);
 		} else
 			Carry.setSelected(true);
 	}
 
-	public void RecebeCargaNegativo(char cargaNegativo) {
-
-		if (cargaNegativo == '0') {
+	public void RecebeCargaNegativo(byte cargaNegativo) {
+		if (cargaNegativo == 0) {
 			Negativo.setSelected(false);
 		} else
 			Negativo.setSelected(true);
 	}
 
-	public void RecebeCargaZero(char cargaZero) {
-		if (cargaZero == '0') {
+	public void RecebeCargaZero(byte cargaZero) {
+		if (cargaZero == 0) {
 			Zero.setSelected(false);
 		} else
 			Zero.setSelected(true);
@@ -1320,7 +1319,7 @@ public class Interface extends JFrame {
 		tableMemory.setValueAt(value, row, 1);
 	}
 
-	public void insertTable(byte value, byte address) {
+	public void insertTable(byte value, int address) {
 		tableMemory.setValueAt(value, address, 1);
 	}
 }

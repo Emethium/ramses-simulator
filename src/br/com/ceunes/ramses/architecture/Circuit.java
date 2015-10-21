@@ -60,11 +60,6 @@ public class Circuit {
 		registerX.setValue(rx);
 	}
 
-	public void chargeFlags(byte n, byte z, byte c) {
-		alu.setNegativeFlag(n);
-		alu.setZeroFlag(z);
-		alu.setCarryFlag(c);
-	}
 
 	public void chargeIRegister(byte data) {
 		instructionRegister.setValue(rdm.getValue());
@@ -79,11 +74,21 @@ public class Circuit {
 	}
 
 	public void write() {
-		memory.set(Math.abs((int) rem.getValue()), rdm.getValue());
+		int position = rem.getValue();
+		if(rem.getValue() < 0) {
+			position = rem.getValue() & 0xff;
+		}
+		System.out.println("Escrevendo na posição de memória " + position);
+		memory.set(position, rdm.getValue());
 	}
 
 	public void read() {
-		rdm.setValue((byte) memory.get(rem.getValue()));
+		int position = rem.getValue();
+		if(rem.getValue() < 0) {
+			position = rem.getValue() & 0xff;
+		}
+		System.out.println("Lendo da posição de memória " + position);
+		rdm.setValue((byte) memory.get(position));
 	}
 
 	public void setMuxToAlu(byte s1, byte s2) {
@@ -129,6 +134,9 @@ public class Circuit {
 		return this.rdm.getValue();
 	}
 
+	public byte getRaValue() {
+		return registerA.getValue();
+	}
 	public byte getPcValue() {
 		return this.programCounter.getValue();
 	}
@@ -152,5 +160,16 @@ public class Circuit {
 	public byte getRbValue() {
 		return this.registerB.getValue();
 	}
+	
+	public byte getFlagC() {
+		return this.alu.getCarryFlag();
+	}
+	
+	public byte getFlagN() {
+		return this.alu.getNegativeFlag();
+	}
 
+	public byte getFlagZ() {
+		return this.alu.getZeroFlag();
+	}
 }

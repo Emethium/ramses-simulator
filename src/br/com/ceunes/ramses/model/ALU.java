@@ -11,6 +11,7 @@ public class ALU {
 		this.negativeFlag = 0;
 		this.zeroFlag = 0;
 		this.carryFlag = 0;
+		this.value = 0;
 	}
 
 	public void operate(String data, byte x, byte y) {
@@ -36,40 +37,64 @@ public class ALU {
 	/* ALU basic operations */
 	public void add(byte x, byte y) {
 		value = (byte) (x + y);
+		checkStatus();
 	}
 
 	public void sub(byte x, byte y) {
 		value = (byte) (x - y);
+		checkStatus();
 	}
 
 	public void and(byte x, byte y) {
 		value = (byte) (x & y);
+		checkStatus();
 	}
 
 	public void or(byte x, byte y) {
-		if(x != 0) {
+		if (x != 0) {
 			value = x;
 		} else {
 			value = y;
 		}
-		
+		checkStatus();
 	}
 
 	public void negate(byte x) {
 		value = (byte) (-x);
+		checkStatus();
 	}
 
 	public void not(byte x) {
-		// value = x == 0 ? (byte)1 : 0;
 		value = (byte) (~((int) x));
+		checkStatus();
 	}
 
 	public void getY(byte y) {
-		value = y;
+		this.value = y;
+		checkStatus();
 	}
 
 	public void shiftRight(byte x) {
 		value = (byte) (x >> 1);
+		checkStatus();
+	}
+
+	public void checkStatus() {
+		if (this.value == 0) {
+			zeroFlag = 1;
+		} else {
+			zeroFlag = 0;
+		}
+		if (this.value < 0) {
+			negativeFlag = 1;
+		} else {
+			negativeFlag = 1;
+		}
+		if (this.value > (byte) 255 || this.value < (byte) -128) {
+			carryFlag = 1;
+		} else {
+			carryFlag = 0;
+		}
 	}
 
 	/* Getters and Setters */

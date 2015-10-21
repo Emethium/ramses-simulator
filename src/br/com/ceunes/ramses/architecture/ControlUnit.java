@@ -11,22 +11,31 @@ public class ControlUnit {
 	public Interface interfac2;
 	public char aux = 1;
 	public List<Byte> memory;
+	public int cycleCounter;
+	public int memoryAcessCounter;
 
 	public ControlUnit() {
+		circuit = new Circuit();
+		interfac2 = new Interface();
+		cycleCounter = 0;
+		memoryAcessCounter = 0;
 	}
 
 	public ControlUnit(Interface interfac2, Circuit circuit) {
 		this.interfac2 = interfac2;
 		this.circuit = circuit;
+		cycleCounter = 0;
+		memoryAcessCounter = 0;
 	}
 
 	public void decode(String data) {
 		String operation;
-		char aux, aux2;
-
+		char aux;
+		int position;
 		// Check if a RA charge operation was expected, then execute
 		if (data.charAt(0) == '1') {
 			circuit.chargeRa(circuit.alu.getValue());
+			interfac2.valorRA(circuit.alu.getValue());
 		}
 		interfac2.RecebeCargaRA(data.charAt(0));
 		data = nextControlUnit(data, 1);
@@ -34,6 +43,7 @@ public class ControlUnit {
 		// Check if a RB charge operation was expected, then execute
 		if (data.charAt(0) == '1') {
 			circuit.chargeRb(circuit.alu.getValue());
+			interfac2.valorRB(circuit.alu.getValue());
 		}
 		interfac2.RecebeCargaRB(data.charAt(0));
 		data = nextControlUnit(data, 1);
@@ -41,6 +51,7 @@ public class ControlUnit {
 		// Check if a RX charge operation was expected, then execute
 		if (data.charAt(0) == '1') {
 			circuit.chargeRx(circuit.alu.getValue());
+			interfac2.valorRX(circuit.alu.getValue());
 		}
 		interfac2.RecebeCargaRX(data.charAt(0));
 		data = nextControlUnit(data, 1);
@@ -71,15 +82,19 @@ public class ControlUnit {
 						.getValue());
 
 		// Charge the N, Z and C flags
-		aux = data.charAt(0);
-		interfac2.RecebeCargaNegativo(aux);
+		if (data.charAt(0) == '1') {
+			interfac2.RecebeCargaNegativo(circuit.getFlagN());
+		}
 		data = nextControlUnit(data, 1);
-		interfac2.RecebeCargaZero(data.charAt(0));
-		aux2 = data.charAt(0);
+
+		if (data.charAt(0) == '1') {
+			interfac2.RecebeCargaZero(circuit.getFlagZ());
+		}
 		data = nextControlUnit(data, 1);
-		interfac2.RecebeCargaCarry(data.charAt(0));
-		circuit.chargeFlags(charToByte(aux), charToByte(aux2),
-				charToByte(data.charAt(0)));
+
+		if (data.charAt(0) == '1') {
+			interfac2.RecebeCargaCarry(circuit.getFlagC());
+		}
 		data = nextControlUnit(data, 1);
 
 		// Set the s5 attribute
@@ -94,8 +109,7 @@ public class ControlUnit {
 			interfac2.RecebeCargaPC(data.charAt(0), value);
 			System.out.println("Incrementou PC! Valor:" + circuit.getPcValue());
 		}
-		
-		
+
 		data = nextControlUnit(data, 1);
 
 		// Charge PC register
@@ -156,7 +170,9 @@ public class ControlUnit {
 		if (data.charAt(0) == '1') {
 			circuit.read();
 			interfac2.valorRDM(circuit.getRdmValue());
-			System.out.println("Read feito! Valor do RDM:" + circuit.getRdmValue());
+			memoryAcessCounter++;
+			System.out.println("Read feito! Valor do RDM:"
+					+ circuit.getRdmValue());
 		}
 		interfac2.RecebeCargaRead(data.charAt(0));
 		data = nextControlUnit(data, 1);
@@ -164,7 +180,10 @@ public class ControlUnit {
 		// Write operation
 		if (data.charAt(0) == '1') {
 			circuit.write();
-			interfac2.insertTable(circuit.getRdmValue(), circuit.getRemValue());
+			position = circuit.getRemValue() >= 0 ? circuit.getRemValue()
+					: circuit.getRemValue() & 0xff;
+			interfac2.insertTable(circuit.getRdmValue(), position);
+			memoryAcessCounter++;
 			System.out.println("Write feito!");
 		}
 		interfac2.RecebeCargaWrite(data.charAt(0));
@@ -185,7 +204,7 @@ public class ControlUnit {
 			System.out.println("Carga no RDM! Valor:" + circuit.getRdmValue());
 		}
 		interfac2.RecebeCargaRDM(data.charAt(0));
-
+		cycleCounter++;
 	}
 
 	public void memoryDataValues() {

@@ -30,9 +30,13 @@ public class TextProcessing {
 				else loop(this.next);
 	}
 	public void loop1() throws IOException{
+		entradaString.close();
+		FileInputStream entrada = new FileInputStream("file.txt");
+		InputStreamReader entradaFormatada = new InputStreamReader(entrada);
+		entradaString = new BufferedReader(entradaFormatada);
 		String linha = entradaString.readLine();
 		while (linha != null) {
-					System.out.println(linha);
+					//System.out.println(linha);
 					unit.decode(linha);
 					linha = entradaString.readLine();
 		}
