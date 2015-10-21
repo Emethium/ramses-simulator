@@ -18,41 +18,36 @@ public class TextProcessing {
 	public boolean next=true;
 	public boolean one;
 	public Circuit circuit;
+	public boolean prox=false;
 
-	public void read(boolean all, boolean begin, Interface interfac2,Circuit circuit) throws IOException {
+	public void read(boolean all, Interface interfac2,Circuit circuit) throws IOException {
 		this.interfac2= interfac2;
 		this.circuit = circuit;
 		unit = new ControlUnit(interfac2,circuit);
 				FileInputStream entrada = new FileInputStream("file.txt");
 				InputStreamReader entradaFormatada = new InputStreamReader(entrada);
 				entradaString = new BufferedReader(entradaFormatada);
-				if(all) loop1();
-				else loop(this.next);
+				if(all) loop(true);
+				else loop(false);
+					
 	}
-	public void loop1() throws IOException{
-		entradaString.close();
-		FileInputStream entrada = new FileInputStream("file.txt");
-		InputStreamReader entradaFormatada = new InputStreamReader(entrada);
-		entradaString = new BufferedReader(entradaFormatada);
-		String linha = entradaString.readLine();
-		while (linha != null) {
-					//System.out.println(linha);
-					unit.decode(linha);
-					linha = entradaString.readLine();
-		}
-		entradaString.close();
-	
-	}
-
 	public void loop(boolean prox) throws IOException{
 			String linha = entradaString.readLine();
 			if(linha==null){
 				interfac2.setFim(false);
 				entradaString.close();
-				
 			}
 			else{
-			unit.decode(linha);
+				
+				if(prox){
+					while (linha != null) {
+						unit.decode(linha);
+						linha = entradaString.readLine();
+					}
+					entradaString.close();
+					interfac2.setFim(false);
+				}
+				else unit.decode(linha);
 			}
 	}
 }

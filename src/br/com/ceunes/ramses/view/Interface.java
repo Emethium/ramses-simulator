@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JFormattedTextField;
@@ -30,6 +31,8 @@ public class Interface extends JFrame {
 	 * 
 	 */
 
+	int cycleCounter = 0;
+	int acessMemoryCounter = 0;
 	private static final long serialVersionUID = 1L;
 	public ControlUnit controlUnit;
 	public Circuit circuit = new Circuit();
@@ -40,6 +43,7 @@ public class Interface extends JFrame {
 	/**
 	 * /** declaration of all components
 	 */
+	public int aux25;
 	public boolean first = true;
 	public boolean fim = true;
 	public JRadioButton CargaPC0 = new JRadioButton("0");
@@ -50,7 +54,7 @@ public class Interface extends JFrame {
 
 	public JRadioButton CargaRI0 = new JRadioButton("0");
 	public JRadioButton CargaRI1 = new JRadioButton("1");
-
+	
 	public JRadioButton CargaRX0 = new JRadioButton("0");
 	public JRadioButton CargaRX1 = new JRadioButton("1");
 
@@ -1035,21 +1039,36 @@ public class Interface extends JFrame {
 		indices();
 	}
 
+	
+
+	
+	
+	public void Estatisticas(){
+		System.out.println("Acesso à memória :" + acessMemoryCounter);
+		System.out.println("Quantidade de ciclos :" +cycleCounter);
+		String texto = "Acessos a Memória: "+ acessMemoryCounter;  
+		texto += "\nContador de Ciclos: "+cycleCounter;  
+		texto += "\nAcessos a ALU: "+cycleCounter;
+		JOptionPane.showMessageDialog(null,texto,"Estatisticas", JOptionPane.INFORMATION_MESSAGE );
+	}
+	
+	
 	public void Executar() {
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (first) {
-						memory.memoryRead(Interface.this, circuit);
-						read.read(true, true, Interface.this, circuit);
-						controlUnit.memoryDataValues();
+					if (first==false) {
+						read.loop(true);
 						btnExecutar.setEnabled(false);
 						btnproximaInstrucao.setEnabled(false);
+						Estatisticas();
 					} else {
-						read.read(true, true, Interface.this, circuit);
+						memory.memoryRead(Interface.this, circuit);
 						controlUnit.memoryDataValues();
+						read.read(true, Interface.this, circuit);
 						btnExecutar.setEnabled(false);
 						btnproximaInstrucao.setEnabled(false);
+						Estatisticas();
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -1062,6 +1081,9 @@ public class Interface extends JFrame {
 	public void setFim(boolean Fim) {
 		this.fim = Fim;
 	}
+	public void setFirst(boolean first){
+		this.first = first;
+	}
 
 	public void proximaInstrucao() {
 		btnproximaInstrucao.addActionListener(new ActionListener() {
@@ -1070,12 +1092,15 @@ public class Interface extends JFrame {
 					if (first == true) {
 						memory.memoryRead(Interface.this, circuit);
 						controlUnit.memoryDataValues();
-						read.read(false, true, Interface.this, circuit);
-						first = false;
+						read.read(false, Interface.this, circuit); //nao executar tudo, apenas abre o arquivo e decodifica a 1 linha
+						setFirst(false);
 					} else
-						read.loop(true);
+					read.loop(false);
 					btnproximaInstrucao.setEnabled(fim);
 					btnExecutar.setEnabled(fim);
+					if(fim==false)
+						Estatisticas();
+					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -1321,5 +1346,13 @@ public class Interface extends JFrame {
 
 	public void insertTable(byte value, int address) {
 		tableMemory.setValueAt(value, address, 1);
+	}
+	
+	public void setCycleCounter(int value) {
+		cycleCounter = value;
+	}
+	
+	public void setAcessMemoryCounter(int value) {
+		acessMemoryCounter = value;
 	}
 }

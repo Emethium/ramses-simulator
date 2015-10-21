@@ -32,6 +32,9 @@ public class ControlUnit {
 		String operation;
 		char aux;
 		int position;
+		
+		this.cycleCounter++;
+		
 		// Check if a RA charge operation was expected, then execute
 		if (data.charAt(0) == '1') {
 			circuit.chargeRa(circuit.alu.getValue());
@@ -204,7 +207,9 @@ public class ControlUnit {
 			System.out.println("Carga no RDM! Valor:" + circuit.getRdmValue());
 		}
 		interfac2.RecebeCargaRDM(data.charAt(0));
-		cycleCounter++;
+		
+		interfac2.setAcessMemoryCounter(memoryAcessCounter);
+		interfac2.setCycleCounter(cycleCounter);
 	}
 
 	public void memoryDataValues() {
@@ -223,5 +228,13 @@ public class ControlUnit {
 	public byte charToByte(char c) {
 		String s = String.valueOf(c);
 		return (byte) Integer.parseInt(s);
+	}
+	
+	public int getMemoryAcessCounter() {
+		return this.memoryAcessCounter;
+	}
+	
+	public int getCycleCounter() {
+		return this.cycleCounter;
 	}
 }
